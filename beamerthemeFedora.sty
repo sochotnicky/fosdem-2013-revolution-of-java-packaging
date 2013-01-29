@@ -1,0 +1,202 @@
+% vim:set tw=0:
+
+\RequirePackage{graphics}
+\ProvidesPackage{beamerthemeFedora}
+
+\mode<presentation> {
+
+% color definitions
+\definecolor{fgrey}{RGB}{204,204,204}
+\definecolor{fgrey2}{RGB}{224,224,224}
+\definecolor{fblue}{RGB}{0,102,255}
+\definecolor{fblue2}{RGB}{51,102,153}
+\definecolor{fblue3}{RGB}{51,102,153}
+\definecolor{fblue4}{RGB}{51,102,153}
+% \definecolor{fblue2}{RGB}{173,35,57}
+% \definecolor{fblue3}{RGB}{151,37,55}
+% \definecolor{fblue4}{RGB}{138,10,7}
+
+\setbeamercolor{structure}{fg=fblue4}
+\setbeamercolor{local structure}{fg=fgrey}
+\setbeamercolor{alerted text}{fg=fblue}
+
+\setbeamercolor{palette primary}{bg=fblue!50}
+\setbeamercolor{palette secondary}{bg=fblue!60}
+\setbeamercolor{palette tertiary}{bg=fblue!70}
+\setbeamercolor{palette quaternary}{bg=fblue}
+
+\setbeamercolor{section in head/foot}{bg=fgrey2,fg=black}
+\setbeamercolor{subsection in head/foot}{bg=fgrey,fg=black}
+%\setbeamerfont*{section in head/foot}{size={}}
+%\setbeamerfont*{subsection in head/foot}{size={}}
+
+% revert local structure's gray for description items
+\setbeamercolor{description item}{parent=structure}
+
+% square items
+\useinnertheme{rectangles}
+% centered squares
+\setbeamertemplate{itemize item}{\rule[0.5ex]{0.5ex}{0.5ex}}
+\setbeamertemplate{itemize subitem}{\small\rule[0.5ex]{0.5ex}{0.5ex}}
+\setbeamertemplate{itemize subsubitem}{\small\rule[0.5ex]{0.5ex}{0.5ex}}
+
+% normal sized block titles
+\setbeamerfont{block title}{size={}}
+
+% bold titles
+\setbeamerfont{structure}{series=\bfseries}
+
+% use this around \frame{\titlepage} and \frame{\partpage}
+\newenvironment{rhbg}
+    {\setbeamertemplate{background canvas}%
+	{\includegraphics[width=\paperwidth,height=\paperheight]{fedorabg.png}}
+    \setbeamercolor{structure}{fg=white}
+    \setbeamercolor{palette quaternary}{fg=white}
+    \setbeamercolor*{normal text}{fg=white,bg={}}
+    \usebeamercolor*{normal text}
+    \rh@rhbg=1\relax
+    }
+    {\rh@rhbg=0\relax
+    }
+\newcount\rh@rhbg
+\rh@rhbg=0\relax
+% \rh@rhbg=1 -- turns off headline
+
+
+% share default colors
+\setbeamercolor{author}{parent=titlelike}
+\setbeamercolor{institute}{parent=titlelike}
+\setbeamercolor{date}{parent=titlelike}
+\setbeamercolor{part name}{parent=titlelike}
+\setbeamercolor{math text}{parent=normal text}
+\setbeamercolor{normal text in math text}{parent=normal text}
+\setbeamercolor{abstract}{parent=normal text}
+\setbeamercolor{itemize/enumerate body}{parent=normal text}
+\setbeamercolor{itemize/enumerate subbody}{parent=normal text}
+\setbeamercolor{itemize/enumerate subsubbody}{parent=normal text}
+
+% blocks
+\setbeamercolor{block title}{fg=white,bg=fblue4!90}
+\setbeamercolor{block title alerted}{use=alerted text,use=block title,fg=alerted text.fg!30!block title.fg,bg=block title.bg}
+\setbeamercolor{block title example}{use=example text,use=block title,fg=example text.fg!30!block title.fg,bg=block title.bg}
+
+\setbeamercolor{block body}{parent=normal text,bg=fgrey2!50}
+\setbeamercolor{block body alerted}{parent=normal text,use=block title alerted,use=block body,fg=alerted text.fg!50!fg,bg=block body.bg}
+\setbeamercolor{block body example}{parent=normal text,use=block title example,use=block body,fg=example text.fg!40!fg,bg=block body.bg}
+
+\setbeamertemplate{blocks}[rounded]
+
+% normal size font
+\setbeamerfont*{institute}{}
+
+% removed centering, adjusted lengths and order
+\setbeamertemplate{title page}
+{
+  \vbox{}\vskip 2ex%
+  \begin{beamercolorbox}[sep=3pt]{title}
+    \usebeamerfont{title}\inserttitle\par%
+    \ifx\insertsubtitle\@empty%
+    \else%
+      \vskip0.20em%
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+    \fi%
+  \end{beamercolorbox}%
+  \vskip0.5em\par
+
+  \begin{beamercolorbox}[sep=3pt]{institute}
+    \usebeamerfont{institute}\insertinstitute
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[sep=3pt]{author}
+    \usebeamerfont{author}\insertauthor
+  \end{beamercolorbox}
+  \begin{beamercolorbox}[sep=3pt]{date}
+    \usebeamerfont{date}\insertdate
+  \end{beamercolorbox}\vskip0.5em
+  {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \vfill
+}
+
+% removed centering and adjusted lengths
+\setbeamertemplate{part page}
+{
+  {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\partname~\insertromanpartnumber}
+  \vskip0.5em\par
+  \begin{beamercolorbox}[sep=3pt]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+  \vfill
+}
+
+% similar thing for sections
+\setbeamertemplate{section page}
+{
+  {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\sectionname~\thesection}
+  \vskip0.5em\par
+  \begin{beamercolorbox}[sep=3pt]{part title}
+    \usebeamerfont{part title}\insertsectionhead\par
+  \end{beamercolorbox}
+  \vfill
+}
+
+% adjusted lengths and added the logo
+\setbeamertemplate{frametitle}
+{
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+  \begin{beamercolorbox}[sep=0.9cm,wd=\the\@tempdima]{frametitle}
+    \usebeamerfont{frametitle}%
+    \hbox{}\vskip-3.9ex\hskip-2ex%
+    \if@tempswa\else\csname beamer@fte\endcsname\fi%
+    \includegraphics[width=1.5cm]{fedoralogo.pdf}%
+    \par%
+    \vbox{}\vskip-2ex%
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-0.5ex%
+    \if@tempswa\else\vskip-0.9cm\fi% set inside beamercolorbox... evil here...
+  \end{beamercolorbox}%
+}
+
+% only print if not empty and don't take any space
+\setbeamertemplate{headline}
+{
+  \ifnum\c@framenumber=0%
+  \else
+  \ifnum\rh@rhbg=0%
+  \ifx\insertframetitle\@empty% headline without rh logo is ugly
+  \else
+  % calc the width
+  \ifx\insertsubsectionhead\@empty
+    \rh@tempdim=\paperwidth
+  \else
+    \rh@tempdim=.7\paperwidth
+  \fi
+  % draw
+  \setbox\rh@temprhheadline\hbox to \textwidth{\hbox{}\hfill%
+  \begin{beamercolorbox}[wd=\rh@tempdim,ht=2.5ex,dp=0.5ex,right]{section in head/foot}%
+    \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}
+  \end{beamercolorbox}%
+    \ifx\insertsubsectionhead\@empty%
+    \else
+    \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.5ex,dp=0.5ex,left]{subsection in head/foot}%
+      \usebeamerfont{subsection in head/foot}\hspace*{2ex}\insertsubsectionhead
+    \end{beamercolorbox}%
+    \fi}
+
+  \box\rh@temprhheadline
+  \fi
+  \fi
+  \fi
+}
+
+\newbox\rh@temprhheadline
+\newdimen\rh@tempdim
+
+}

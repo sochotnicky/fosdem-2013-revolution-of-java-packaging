@@ -1,0 +1,49 @@
+\ProvidesPackage{beamerredhat}
+
+\mode<article> {
+\newenvironment{rhbg}{}{}
+}
+\mode<handout> {
+\renewenvironment{rhbg}{}{}
+}
+
+\newcommand{\Rhbg}[1]{
+    \begin{rhbg}%
+    #1%
+    \end{rhbg}}
+
+\renewcommand{\sectionpage}{\usebeamertemplate*{section page}}
+
+\newcommand{\fancySectionOpens}{
+\AtBeginSection[]%
+{
+    \Rhbg{\frame{\sectionpage}}
+}
+}
+
+\newcommand{\fancyPartOpens}{
+\AtBeginPart%
+{
+    \Rhbg{\frame{\partpage}}
+}
+}
+
+% ugly quirk to make textpos work in notesonly mode
+\newbox\rh@temprhignorebox
+\newcommand{\textposquirk}{
+\ifbeamer@notesnormals\else%
+\renewenvironment{textblock}{\setbox\rh@temprhignorebox=\vbox\bgroup}{\egroup}
+\renewenvironment{textblock*}{\setbox\rh@temprhignorebox=\vbox\bgroup}{\egroup}
+\fi
+}
+
+% The end.
+\newcommand{\theend}{
+    \hfill
+    \begin{center}
+    {\Huge The end.}
+    \par\vspace*{0.5cm}
+    Thanks for listening.
+    \end{center}
+    \hfill
+}

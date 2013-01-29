@@ -1,0 +1,61 @@
+SHOW=no
+PDFVIEWER=evince
+LATEX=pdflatex
+
+.PHONY: all clean handout notes
+all:
+
+# Don't touch this, HAHA.
+clean: TEXS=$(patsubst %.tex,%,\
+	$(filter-out %.pp.tex %.handout.tex %.notes.tex %.text.tex,\
+	$(wildcard *.tex)))
+clean: PRESENTATION_TMPS=$(wildcard \
+	$(addsuffix .pp.tex,$(TEXS)) \
+	$(addsuffix .handout.tex,$(TEXS)) \
+	$(addsuffix .notes.tex,$(TEXS)) \
+	$(addsuffix .text.tex,$(TEXS)))
+clean: TEX_TMPS=$(filter-out %.tex %.png %.orig %.zal, \
+	$(wildcard $(addsuffix .*,$(TEXS))))
+clean:
+	$(RM) $(wildcard $(PRESENTATION_TMPS) $(TEX_TMPS))
+
+%.pdf: %.tex
+	$(LATEX) $<
+	$(LATEX) $<
+	if [ "$(SHOW)" == "yes" ]; then $(PDFVIEWER) $@; fi
+
+%.png: %.pdf
+	pstoimg -depth 8 -density 120 -antialias -aaliastext -multipage -out $@ $<
+	touch $@
+
+%.eps: %.svg
+	inkscape -z -f $< -D --export-area-snap -E $@
+
+%.pdf: %.eps
+	epstopdf --outfile=$@ $<
+
+
+# presentation/article texs/pdfs
+%.text.tex: %.tex
+	echo '\def\RHpresentationHead#1{}\def\RHarticleHead#1{#1}' >$@
+	echo '\input $<' >>$@
+
+%.pp.tex: %.tex
+	echo '\def\RHpresentationHead#1{#1}\def\RHarticleHead#1{}' >$@
+	echo '\input $<' >>$@
+
+%.handout.tex: %.tex
+	echo '\def\RHpresentationHead#1{#1}\def\RHarticleHead#1{}' >$@
+	echo '\PassOptionsToClass{handout}{beamer}' >>$@
+	echo '\input $<' >>$@
+
+%.notes.tex: %.tex
+	echo '\def\RHpresentationHead#1{#1\setbeameroption{show only notes}}' >$@
+	echo '\def\RHarticleHead#1{}' >>$@
+	echo '\PassOptionsToClass{handout}{beamer}' >>$@
+	echo '\input $<' >>$@
+
+%.text.pdf: %.text.tex %.tex
+%.pp.pdf: %.pp.tex %.tex
+%.handout.pdf: %.handout.tex %.tex
+%.notes.pdf: %.notes.tex %.tex

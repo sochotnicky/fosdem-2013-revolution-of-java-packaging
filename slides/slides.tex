@@ -1,0 +1,160 @@
+\RHpresentationHead{
+  \documentclass[pdftex,unicode,xcolor=table]{beamer}
+}
+
+\RHarticleHead{
+  % This does not work, because of colors, \insertauthor, etc.
+  \documentclass[a4paper,12pt,pdftex,unicode]{article}
+  \usepackage[envcountsect]{beamerarticle}
+}
+
+
+
+\mode<presentation> {
+  \usetheme{Fedora}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamercovered{transparent=5}
+}
+\mode<article> {
+  \usepackage{fullpage}
+}
+
+\mode<handout> {
+  \usepackage{pgfpages}
+  \pgfpagesuselayout{4 on 1}[a4paper,landscape,border shrink=5mm]
+}
+
+
+\usepackage{beamerredhat}
+\usepackage{etex}
+\usepackage[utf8]{inputenc}
+%\usepackage[lang]{babel}
+\usepackage{setspace,amsfonts,calc,upquote,hyperref,floatflt,graphicx}
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage[absolute,overlay]{textpos}\textposquirk
+
+
+% presentation title/author/etc.
+\title{(R)evolution of Java packaging in GNU/Linux}
+\subtitle{Automating packaging}
+\author{Authors: \\
+  \em{Stanislav Ochotnický} sochotnicky@redhat.com\\
+  \em{Mikołaj Izdebski} mizdebsk@redhat.com}
+\date{Date: \em{2nd February 2013}}
+
+
+% fancy section/part pages?
+% \fancySectionOpens
+% \fancyPartOpens
+
+\begin{document}
+
+
+% title pages
+\mode<article> {
+  \maketitle
+  \newpage
+}
+
+\begin{rhbg}
+  \begin{frame}
+    \titlepage
+    \begin{abstract}
+      Over past 2 years, tooling and guidelines for packaging Java have changed in
+      Fedora Linux considerably. What used to be a 1000 line build script can soon
+      become 100 lines of mostly metadata. But all of that relies on sane build system
+      with predictable behavior on Java side: Maven.
+    \end{abstract}
+    \note{
+      Here be dragons. Each frame should have a note describing what we'll
+      approximately talk about. Not word-for-word, just a generic idea
+    }
+  \end{frame}
+\end{rhbg}
+
+
+\section{Overview}
+\Large
+\begin{frame}
+  \frametitle{Generic Java Packaging Problems (GJPP)}
+  \begin{itemize}
+  \item Lorem ipsum
+  \end{itemize}
+  \note{Note!}
+\end{frame}
+
+\section{History lessons}
+\begin{frame}
+  \frametitle{Original recipes}
+  \begin{itemize}
+  \item Lorem ipsum addendum
+  \end{itemize}
+  \note{Note!}
+\end{frame}
+
+
+\section{Future on the go}
+\begin{frame}
+  \frametitle{What to do}
+  \note{We should add notes here and there
+  }
+\end{frame}
+
+\section{General Tips}
+\begin{frame}[fragile] % needed for verbatim blocks on slides
+  \frametitle{Spec example}
+  \begin{block}{Example of cruft}
+    \scriptsize
+\begin{verbatim}
+Requires(post):    jpackage-utils >= 0:1.7.2
+Requires(postun):  jpackage-utils >= 0:1.7.2
+\end{verbatim}
+  \end{block}
+  \note{Note!}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Few more examples}
+  \begin{block}{Itemize block 1}
+    \begin{itemize}
+    \item Z in X.Y.Z
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Example block 2}
+    \begin{itemize}
+    \item A in ABC
+    \end{itemize}
+  \end{block}
+  \note{Note!}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Showcase of different block}
+  \begin{exampleblock}{Example block is a bit different}
+    Oh is it really?
+  \end{exampleblock}
+
+  \begin{block}{How different?}
+    Yes, really
+  \end{block}
+  \note{Note!}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Summary}
+  \begin{itemize}
+    \item Smart overview of previous stuff
+  \end{itemize}
+\end{frame}
+
+
+\mode<presentation> {
+  \Rhbg{\frame{\theend}}
+}
+
+\end{document}
