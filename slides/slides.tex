@@ -78,11 +78,50 @@
 \section{Overview}
 \Large
 \begin{frame}
-  \frametitle{Generic Java Packaging Problems (GJPP)}
+  \frametitle{Why is there a problem in the first place?}
   \begin{itemize}
-  \item Lorem ipsum
+  \item Sort of NIH syndrome everywhere
+  \item Each Java package a unique set of problems
+    \begin{itemize}
+      \item Ant, Maven, Gradle, Ivy, 20 XML parser dependencies
+    \end{itemize}
+  \item Each Linux distribution a unique set of problems
+    \begin{itemize}
+      \item RPM, APT, Portage, FHS, exceptions to FHS
+    \end{itemize}
+  \item Can we do better?
+    \begin{itemize}
+      \item Conventions
+      \item Tooling
+      \item Sharing
+      \item Caring
+    \end{itemize}
   \end{itemize}
-  \note{Note!}
+  \note{NIH - distributions, java developers, everyone is guilty.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{First things first}
+Maven is the only widely-used Java build tool with any resemblance of
+      conventions
+  \begin{itemize}
+  \item pom.xml contents
+    \begin{itemize}
+    \item dependencies
+    \item licenses
+    \item prep/build/deploy configuration
+    \item other metadata
+    \end{itemize}
+  \item <some>.spec contents
+    \begin{itemize}
+    \item dependencies
+    \item licenses
+    \item prep/build/install configuration
+    \item file lists
+    \item changelog
+    \item other metadata
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \section{History lessons}
