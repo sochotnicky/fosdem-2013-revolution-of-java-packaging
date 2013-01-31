@@ -125,14 +125,56 @@ Maven is the only widely-used Java build tool with any resemblance of
 \end{frame}
 
 \section{History lessons}
-\begin{frame}
-  \frametitle{Original recipes}
-  \begin{itemize}
-  \item Lorem ipsum addendum
-  \end{itemize}
+\begin{frame}[fragile]
+  \frametitle{Build description of maven-surefire in F-12}
+  \scriptsize
+  \begin{verbatim}
+%if %{with_maven}
+    export MAVEN_REPO_LOCAL=$(pwd)/.m2/repository
+    mkdir -p $MAVEN_REPO_LOCAL
+    cat %{SOURCE4}
+    mvn-jpp -e -Dmaven.repo.local=$MAVEN_REPO_LOCAL \
+        -Dmaven2.jpp.depmap.file=%{SOURCE4} \
+        -Dmaven.test.skip=true install
+    for dir in maven-surefire-plugin maven-surefire-report-plugin \
+               surefire-api surefire-booter surefire-providers/surefire-junit; do
+        (cd $dir
+         mvn-jpp -Dmaven.repo.local=$MAVEN_REPO_LOCAL \
+                 -Dmaven2.jpp.depmap.file=%{SOURCE4} \
+                 javadoc:javadoc
+        )
+    done
+%else
+    mkdir -p lib
+    build-jar-repository -s -p lib classworlds junit plexus/utils
+    ant -Dmaven.mode.offline=true
+    cp -p target/*jar ../lib/$project.jar
+%endif
+  \end{verbatim}
   \note{Note!}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{Build description of maven-surefire in F-15}
+  \scriptsize
+  \begin{verbatim}
+# tests turned off because they need jmock
+mvn-rpmbuild -e \
+        -Dmaven.local.depmap.file=%{SOURCE1} \
+        -Dmaven.test.skip=true \
+        install javadoc:aggregate
+  \end{verbatim}
+  \note{Note!}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Build description of maven-surefire in F-19}
+  \scriptsize
+  \begin{verbatim}
+%mvn_build -f
+  \end{verbatim}
+  \note{Note!}
+\end{frame}
 
 \section{Future on the go}
 \begin{frame}
