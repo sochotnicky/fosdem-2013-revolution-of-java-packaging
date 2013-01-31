@@ -134,6 +134,58 @@ Maven is the only widely-used Java build tool with any resemblance of
 \end{frame}
 
 \section{History lessons}
+\begin{frame}
+\frametitle{Maven modifications in Fedora}
+\begin{itemize}
+\item Custom resolver (WorkspaceReader) used in local mode
+\item Verification of models turned off in local mode
+\item Fix test scope dependency resolving when tests are disabled
+\item Approximate idea is:
+  \begin{itemize}
+  \item Create a file that will map GAV to jars on filesystem
+  \item Return artifacts based on this mapping
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \scriptsize
+\frametitle{Modifications of pom.xml}
+  \begin{block}{Old style patching}
+\begin{verbatim}
+--- ./surefire-providers/pom.xml.sav
++++ ./surefire-providers/pom.xml
+@@ -30,8 +30,10 @@
+   <name>SureFire Providers</name>
+   <modules>
+     <module>surefire-junit</module>
++<!--
+     <module>surefire-junit4</module>
+     <module>surefire-testng</module>
++-->
+   </modules>
+   <dependencies>
+     <dependency>
+\end{verbatim}
+\end{block}
+
+  \begin{block}{New macros}
+\begin{verbatim}
+%pom_disable_module surefire-junit4
+%pom_disable_module surefire-testng
+\end{verbatim}
+\note{There are other macros:
+    \begin{itemize}
+    \item adding/removing dependencies
+    \item modifying plugins
+    \item injecting/removing any xml parts
+    \end{itemize}
+}
+\end{block}
+
+\end{frame}
+
+
 \begin{frame}[fragile]
   \frametitle{Build description of maven-surefire in F-12}
   \scriptsize
