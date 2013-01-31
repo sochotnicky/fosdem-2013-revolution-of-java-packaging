@@ -153,6 +153,267 @@ Requires(postun):  jpackage-utils >= 0:1.7.2
 \end{frame}
 
 
+
+
+\begin{frame}
+  \frametitle{Current state}
+  \begin{itemize}
+    \item Simple issues were solved
+    \item Most time-consuming tasks are still manual
+    \begin{itemize}
+      \item keeping dependencies up-to-date
+      \item installing multi-artifact packages
+      \item maintainence of multiple subpackages
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Plexus-compiler example}
+\end{frame}
+
+\begin{frame}
+  \frametitle{A tool is needed}
+  \begin{itemize}
+    \item Simple usage
+    \item Powerfull
+    \item Convention over configuration
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Structure of XMvn}
+  \begin{itemize}
+    \item Portable part
+    \begin{itemize}
+      \item pure Java
+      \item integration with Maven
+      \item highly configurable
+      \item uses unmodified Maven
+    \end{itemize}
+    \item Distribution-specific part
+    \begin{itemize}
+      \item macros and shell scripts
+      \item integration with package manager
+      \item follows distribution standards
+      \item automatic dependency generation
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Preparation for the build}
+  \begin{block}{Patching POM files}
+    \scriptsize
+\begin{verbatim}
+%pom_add_dep org.apache.commons:commons-io
+%pom_disable_module submod-foo
+\end{verbatim}
+  \end{block}
+  \begin{block}{Launching build}
+    \scriptsize
+\begin{verbatim}
+%mvn_file : %{name}
+%mvn_build
+\end{verbatim}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{During build}
+  \begin{itemize}
+    \item Create build plan
+    \item Read pakcge Metadata
+    \item Call Maven to builds package
+    \begin{itemize}
+      \item Compile sources
+      \item Run tests
+      \item Generate javadocs
+    \end{itemize}
+    \item Generate matadata
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{After the build}
+  \begin{block}{Installation}
+    \scriptsize
+\begin{verbatim}
+%mvn_install
+\end{verbatim}
+  \end{block}
+  \begin{block}{Enumerating files}
+    \scriptsize
+\begin{verbatim}
+%files -f .mfiles
+%files javadoc -f .mfiles-javadoc
+\end{verbatim}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \begin{block}{Example spec file (part 1)}
+    \scriptsize
+\begin{verbatim}
+Name:           maven-shared-incremental
+Version:        1.0
+Release:        1%{?dist}
+Summary:        Maven Incremental Build support utilities
+License:        ASL 2.0
+Group:          Development/Libraries
+URL:            http://maven.apache.org/shared/maven-shared-incremental/
+Source0:        http://repo1.maven.org/maven2/org/apache/maven/[...]
+BuildArch:      noarch
+
+BuildRequires:  maven-local
+BuildRequires:  plexus-component-annotations
+BuildRequires:  plexus-component-api
+
+%description
+Various utility classes and plexus components for supporting
+incremental build functionality in maven plugins.
+
+%package javadoc
+Summary:        API documentation for %{name}
+Group:          Documentation
+
+%description javadoc
+This package provides %{summary}.
+\end{verbatim}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \begin{block}{Example spec file (part 2)}
+    \scriptsize
+\begin{verbatim}
+%prep
+%setup -q
+
+%build
+%mvn_build
+
+%install
+%mvn_install
+
+%files -f .mfiles
+%doc LICENSE NOTICE
+%dir %{_javadir}/%{name}
+
+%files javadoc -f .mfiles-javadoc
+%doc LICENSE NOTICE
+
+%changelog
+* Wed Jan 23 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.0-1
+- Initial packaging
+
+
+
+
+
+\end{verbatim}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Advantages}
+  \begin{itemize}
+    \item Simpler, more readable packages
+    \item Easier and faster packaging and updates
+    \item Better quality packages
+    \item Reduced metadata redundancy
+    \item No modifications to Maven
+    \item Changes in guidelines are easier to introduce
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Easier Maven maintenance}
+  \begin{block}{Maven diff}
+    \scriptsize
+\begin{verbatim}
+ 0001-Add-plugin-api-deps.patch                |  28 --
+ 0001-Customize-compiler-plugin.patch          | 104 ------
+ 0002-Use-custom-resolver.patch                | 224 -------------
+ 0003-Use-utf-8-source-encoding.patch          |  24 --
+ ...-scope-skipping-with-maven.test.skip.patch | 160 ---------
+ ...ompiler-plugin-default-to-source-1.5.patch |  33 --
+ JavadirWorkspaceReader.java                   | 198 -----------
+ MavenJPackageDepmap.java                      | 313 ------------------
+ maven-empty-dep.jar                           | Bin 341 -> 0 bytes
+ maven-empty-dep.pom                           |   9 -
+ maven-script-local                            |  47 ---
+ maven-script-rpmbuild                         |  93 ------
+ maven.spec                                    | 269 +++------------
+ repo-metadata.tar.xz                          | Bin 3028 -> 0 bytes
+ 14 files changed, 37 insertions(+), 1465 deletions(-)
+\end{verbatim}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Simplified package}
+  \begin{block}{maven-surefire diff between F-12 and F-18}
+    \scriptsize
+\begin{verbatim}
+ .cvsignore                           |   3 -
+ .gitignore                           |  14 +
+ Makefile                             |  21 --
+ maven-surefire-2.3-junit4-pom.patch  |  11 -
+ maven-surefire-booter-build.xml      |  64 -----
+ maven-surefire-build.xml             |  90 ------
+ maven-surefire-buildonlyjunit3.patch |  13 -
+ maven-surefire-buildskiptestng.patch |  12 -
+ maven-surefire-jpp-depmap.xml        |  23 --
+ maven-surefire-plexus12.patch        |  20 --
+ maven-surefire.spec                  | 399 +++++++--------------------
+ sources                              |   3 +-
+ 12 files changed, 117 insertions(+), 556 deletions(-)
+\end{verbatim}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Disadvantages}
+  \begin{itemize}
+    \item Less control
+    \item Harder to debug
+    \item Incompatibility with older systems
+    \item Bleeding edge
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Summary}
+  \begin{itemize}
+    \item Improved packaging
+    \item Full solution
+    \item Backwards-compatible
+    \item Smooth transition
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Future}
+  \begin{itemize}
+    \item Automated package generation
+    \item Debugging tools
+    \item Graphical tooling
+    \item Support for more types of artifacts
+    \item Integration with Eclipse
+    \item Adoption by different distributions?
+  \end{itemize}
+\end{frame}
+
+
+
 \mode<presentation> {
   \Rhbg{\frame{\theend}}
 }
