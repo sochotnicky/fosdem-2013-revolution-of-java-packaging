@@ -222,6 +222,36 @@ Requires(postun): jpackage-utils
 \end{block}
 \end{frame}
 
+
+\begin{frame}[fragile]
+  \scriptsize
+\frametitle{File lists}
+  \begin{block}{Manual listing}
+\begin{verbatim}
+%files
+%defattr(-,root,root,-)
+%doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
+%{_javadir}/*.jar
+%{_mavenpomdir}/JPP-%{short_name}.pom
+%{_mavendepmapfragdir}/*
+\end{verbatim}
+\end{block}
+
+  \begin{block}{Automated way}
+\begin{verbatim}
+%files -f .mfiles
+%doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
+\end{verbatim}
+\note{There are other macros:
+    \begin{itemize}
+    \item adding/removing dependencies
+    \item modifying plugins
+    \item injecting/removing any xml parts
+    \end{itemize}
+}
+\end{block}
+\end{frame}
+
 \begin{frame}
   \frametitle{Current state}
   \begin{itemize}
