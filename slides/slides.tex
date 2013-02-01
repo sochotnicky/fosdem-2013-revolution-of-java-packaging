@@ -104,24 +104,25 @@
   \frametitle{First things first}
 Maven is the only widely-used Java build tool with any resemblance of
       conventions
-  \begin{itemize}
-  \item pom.xml contents
-    \begin{itemize}
-    \item dependencies
-    \item licenses
-    \item prep/build/deploy configuration
-    \item other metadata
-    \end{itemize}
-  \item some.spec contents
-    \begin{itemize}
-    \item dependencies
-    \item licenses
-    \item prep/build/install configuration
-    \item file lists
-    \item changelog
-    \item other metadata
-    \end{itemize}
-  \end{itemize}
+
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+\small
+\begin{tabular}{| c || c |} \hline
+RPM & Maven \\ \hline
+Name & \textless artifactId/\textgreater \\
+Version & \textless version/\textgreater \\
+(Build)Requires &  \textless dependencies/\textgreater \\
+License & \textless licenses/\textgreater \\
+\%summary & \textless name/\textgreater \\
+\%description & \textless description/\textgreater \\
+\%prep & \textless build/\textgreater \\
+\%build & \textless build/\textgreater \\
+\%install & \textless build/\textgreater \\
+... & ... \\
+\hline
+\end{tabular}
+\end{center}
   \note{Most things are very similar. But there are exceptions:
     \begin{itemize}
     \item Not all metadata is 1:1
