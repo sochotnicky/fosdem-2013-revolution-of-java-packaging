@@ -137,16 +137,35 @@ Maven is the only widely-used Java build tool with any resemblance of
 \begin{frame}
 \frametitle{Maven modifications in Fedora}
 \begin{itemize}
-\item Custom resolver (WorkspaceReader) used in local mode
+\item Custom resolver used in local mode
 \item Verification of models turned off in local mode
 \item Fix test scope dependency resolving when tests are disabled
 \item Approximate idea is:
   \begin{itemize}
   \item Create a file that will map GAV to jars on filesystem
+  \item Maven loads this file when running in local mode
   \item Return artifacts based on this mapping
   \end{itemize}
 \end{itemize}
+\note{Maven and Java stack largely based on JPP. It is our heritage}
 \end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Fixing manual mapping for GAVs}
+  \begin{itemize}
+    \item Mapping between GAV and jar was manual
+      \begin{itemize}
+      \item \%add\_to\_maven\_depmap org.apache.commons commons-lang 2.5 JPP commons-lang
+      \end{itemize}
+    \item Better way with the same result
+      \begin{itemize}
+      \item \%add\_maven\_depmap JPP-commons-lang.pom commons-lang.jar
+      \end{itemize}
+  \end{itemize}
+  \note{This has been achieved by reading metadata from pom.xml}
+\end{frame}
+
 
 \begin{frame}[fragile]
   \scriptsize
