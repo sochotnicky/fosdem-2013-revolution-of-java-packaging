@@ -173,17 +173,18 @@ Requires(postun): jpackage-utils
 
 
 \begin{frame}[fragile]
+\scriptsize
   \frametitle{Fixing manual mapping for GAVs}
-  \begin{itemize}
-    \item Mapping between GAV and jar was manual
-      \begin{itemize}
-      \item \%add\_to\_maven\_depmap org.apache.commons commons-lang 2.5 JPP commons-lang
-      \end{itemize}
-    \item Better way with the same result
-      \begin{itemize}
-      \item \%add\_maven\_depmap JPP-commons-lang.pom commons-lang.jar
-      \end{itemize}
-  \end{itemize}
+  \begin{block}{Mapping between GAV and jar was manual}
+\begin{verbatim}
+%add_to_maven_depmap org.apache.commons commons-io 2.5 JPP commons-io
+\end{verbatim}
+  \end{block}
+  \begin{block}{Better way with the same result}
+\begin{verbatim}
+%add_maven_depmap JPP-commons-io.pom commons-io.jar
+\end{verbatim}
+  \end{block}
   \note{This has been achieved by reading metadata from pom.xml}
 \end{frame}
 
