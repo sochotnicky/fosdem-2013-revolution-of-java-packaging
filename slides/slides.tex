@@ -300,6 +300,14 @@ still simplify spec files considerably
     \item Powerfull
     \item Convention over configuration
   \end{itemize}
+  \note{As shown in previous exmaples, currect situation of packaging
+  of Maven artifacts in Fedora requires a new tool. A tool that would
+  be simple to use, doing most of the tasks for users. It should be
+  powerfull enough to allow migration of all possible spec files to
+  the new style of packaging, not only some of them. It should also
+  utilize the convention over configuration rule so that most simple
+  packages have the simpliest specx files possible, but more
+  complicated cases can be handled with customizations.}
 \end{frame}
 
 \begin{frame}
@@ -320,6 +328,25 @@ still simplify spec files considerably
       \item automatic dependency generation
     \end{itemize}
   \end{itemize}
+
+  \note{XMvn consists of two parts, portable part and
+  distribution-specific part.
+
+The first one is written in pure Java. It is a set of extensions to
+(otherwise unmodified) Apache Maven and is licensed in consistent way
+with Maven (the license is Apache License version 2.0). The portable
+part has many configuration options and it tries not to rely on any
+distribution-specific characteristics, so it should be possible to use
+it on any GNU/Linux or Unix distribution.
+
+The distribution-specific part forms an interface between the way how
+packages are built in distributions and the portable part. For this
+part is implemented only for Fedora, but different layers could be
+created for different distributions, also those not based on
+RPM. Among other things this part is responsible for keeping
+distribution-specific defaults and automatic dependencies are
+generated.}
+
 \end{frame}
 
 
@@ -339,6 +366,10 @@ still simplify spec files considerably
 %mvn_build
 \end{verbatim}
   \end{block}
+  \note{Before the actual build is started POM files are patched using
+  new Macros if needed, but usually that step is not required. Next
+  the build process is configured using simple macros and the portable
+  part of XMvn is launched.}
 \end{frame}
 
 
@@ -355,6 +386,11 @@ still simplify spec files considerably
     \end{itemize}
     \item Generate metadata
   \end{itemize}
+  \note{During the build the configuration is read and the build plan
+  is created. XML metadatata of all Maven packages installed in the
+  file system is read and Maven is invoked to perform the build. After
+  Maven completes the build metadata of currently built packages is
+  generated.}
 \end{frame}
 
 
@@ -372,6 +408,9 @@ still simplify spec files considerably
 %files -f .mfiles
 %files javadoc -f .mfiles-javadoc
 \end{verbatim}
+  \note{After build is finished all relevant files are installed into
+  the build root and lists of installed files are created. These lists
+  are then used to let RPM know which file belongs to which package.}
   \end{block}
 \end{frame}
 
@@ -404,6 +443,9 @@ Summary:        API documentation for %{name}
 This package provides %{summary}.
 \end{verbatim}
   \end{block}
+  \note{A typical RPM spec file for package built using XMvn consists
+  of standard package metadata (name, version, etc.), there are not
+  even requires, only build requires.}
 \end{frame}
 
 
@@ -435,6 +477,10 @@ This package provides %{summary}.
 
 \end{verbatim}
   \end{block}
+  \note{Build and install sections are usually very simple, possiblt
+  single-line. In files sections only non-maven files (like license
+  texts or documentation files) need to be listed, everything
+  Macen-specific is handled automatucally.}
 \end{frame}
 
 \begin{frame}
@@ -447,6 +493,8 @@ This package provides %{summary}.
     \item No modifications to Maven
     \item Changes in guidelines are easier to introduce
   \end{itemize}
+  \note{From previous examples its clear that the new way of packaging
+  Maven artifacts has numerous advantages.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -470,6 +518,8 @@ This package provides %{summary}.
  repo-metadata.tar.xz                          | Bin 3028 -> 0 bytes
  14 files changed, 37 insertions(+), 1465 deletions(-)
 \end{verbatim}
+  \note{All Fedora-specific Maven customizations could be removed,
+  which means much easier Maven maintenance in Fedora.}
   \end{block}
 \end{frame}
 
@@ -500,7 +550,8 @@ This package provides %{summary}.
     cp -p target/*jar ../lib/$project.jar
 %endif
   \end{verbatim}
-  \note{Note!}
+  \note{That's how the build section of an example spec file used to
+  look like in Fedora 12.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -513,7 +564,8 @@ mvn-rpmbuild -e \
         -Dmaven.test.skip=true \
         install javadoc:aggregate
   \end{verbatim}
-  \note{Note!}
+  \note{That's how build section of the same package used to look
+  in Fedora 15.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -522,7 +574,7 @@ mvn-rpmbuild -e \
   \begin{verbatim}
 %mvn_build -f
   \end{verbatim}
-  \note{Note!}
+  \note{And that's Fedora 19. This example speaks for itself.}
 \end{frame}
 
 
@@ -546,6 +598,9 @@ mvn-rpmbuild -e \
  12 files changed, 117 insertions(+), 556 deletions(-)
 \end{verbatim}
   \end{block}
+  \note{Packaging of multi-artifact packages was simplified
+  considerably. This can be seen in an example difference between
+  Fedora 12 and Fedora 19 package.}
 \end{frame}
 
 \begin{frame}
@@ -555,6 +610,8 @@ mvn-rpmbuild -e \
     \item Incompatibility with older systems
     \item Bleeding edge
   \end{itemize}
+  \note{XMvn as any solution solution has its disadvantages too,
+  but it's believed that all the advantages surpass them.}
 \end{frame}
 
 \begin{frame}
@@ -578,6 +635,8 @@ mvn-rpmbuild -e \
     \item Integration with Eclipse
     \item Adoption by different distributions?
   \end{itemize}
+  \note{Any software that is useful has to be changed,
+  so hopefully XMvn future will bring many changes.}
 \end{frame}
 
 
