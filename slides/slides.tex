@@ -68,8 +68,9 @@
       bleeding edge distribution-neutral tooling for packaging Maven artifacts.
     \end{abstract}
     \note{
-      Here be dragons. Each frame should have a note describing what we'll
-      approximately talk about. Not word-for-word, just a generic idea
+    Just our introduction. We have been working in Java/Maven packaging for
+    Fedora and Red Hat Enterprise Linux for several years. We like to make
+    things simple(r).
     }
   \end{frame}
 \end{rhbg}
@@ -97,7 +98,8 @@
       \item Caring
     \end{itemize}
   \end{itemize}
-  \note{NIH - distributions, java developers, everyone is guilty.}
+  \note{NIH - distributions, java developers, everyone is guilty. If we manage
+  to provide a proper tooling a lot of things will get better as a result eventually.}
 \end{frame}
 
 \begin{frame}
@@ -131,6 +133,9 @@ License & \textless licenses/\textgreater \\
     \item Parent pom inheritance missing
     \item Optional dependencies
     \end{itemize}
+
+    The problem with other build systems is that there is no way to standardize
+  parsing and handling of their metadata. They can be spread in many places.
   }
 \end{frame}
 
@@ -148,7 +153,9 @@ License & \textless licenses/\textgreater \\
   \item Return artifacts based on this mapping
   \end{itemize}
 \end{itemize}
-\note{Maven and Java stack largely based on JPP. It is our heritage}
+\note{Maven and Java stack largely based on JPP. It is our heritage, but we are
+  changing it bit by bit. Our patches are not very welcome by the upstream, but
+  we are getting rid of them.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -168,6 +175,10 @@ Requires(postun): jpackage-utils
 \end{block}
 \begin{block}{Now we have}
 \end{block}
+\note{These snippets used to produce one big mapping file out of small xml-like
+  files created by every Maven package. Maven then read this one big file. We
+  moved to reading those small files and with this we didn't have to create the
+  big file any more. Performance hit is negligible.}
 \end{frame}
 
 
@@ -185,7 +196,8 @@ Requires(postun): jpackage-utils
 %add_maven_depmap JPP-commons-io.pom commons-io.jar
 \end{verbatim}
   \end{block}
-  \note{This has been achieved by reading metadata from pom.xml}
+  \note{This has been achieved by reading metadata from pom.xml instead of
+  relying on manual inspection. We managed to get rid of a lot of errors this way}
 \end{frame}
 
 
@@ -221,6 +233,8 @@ Requires(postun): jpackage-utils
     \item modifying plugins
     \item injecting/removing any xml parts
     \end{itemize}
+    All in all they simplify updates and are more reliable than patches since
+    they know about XML structure
 }
 \end{block}
 \end{frame}
@@ -245,12 +259,9 @@ Requires(postun): jpackage-utils
 %files -f .mfiles
 %doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
 \end{verbatim}
-\note{There are other macros:
-    \begin{itemize}
-    \item adding/removing dependencies
-    \item modifying plugins
-    \item injecting/removing any xml parts
-    \end{itemize}
+\note{These file lists are relatively limited in that they only handle files
+that \%add\_maven\_depmap macro knows about: poms, jars, mapping files. They
+still simplify spec files considerably
 }
 \end{block}
 \end{frame}
@@ -266,6 +277,8 @@ Requires(postun): jpackage-utils
       \item maintenance of multiple subpackages
     \end{itemize}
   \end{itemize}
+  \note{Maintenance of multiple subpackages is always a burden. Dependencies get
+  more complicated, spec files are much longer and their updates more error-prone.}
 \end{frame}
 
 
@@ -274,6 +287,10 @@ Requires(postun): jpackage-utils
   \begin{center}
     \includegraphics[scale=0.3]{plexus-compiler.eps}
   \end{center}
+  \note{Maintenance of multiple subpackages is burdensome so it's not done
+  usually. This causes issues when one of the artifacts pulls in big dependency
+  tree. This is a recurring problem we need to solve. One of more recent
+  examples was Freemind which pulled in big part of eclipse-platform in Fedora.}
 \end{frame}
 
 \begin{frame}
